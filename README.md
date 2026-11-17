@@ -1,5 +1,8 @@
 # Excel Add-in
 
+[![CI](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/office-addin/ci.yaml?branch=main&label=CI)](https://github.com/abap2UI5-addons/office-addin/actions/workflows/ci.yaml)
+[![ABAP 7.02](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/office-addin/ci-702.yaml?branch=main&label=ABAP%207.02)](https://github.com/abap2UI5-addons/office-addin/actions/workflows/ci-702.yaml)
+
 **abap2UI5 apps in Microsoft Excel**: an Office add-in that shows an
 [abap2UI5](https://github.com/abap2UI5/abap2UI5) app in Excel's task pane -
 the real abap2UI5 UI5 frontend, served by your SAP system - and lets the app
@@ -424,8 +427,9 @@ npm run e2e:serve    # the test server, to look at: http://127.0.0.1:4310/
 - `webapp/` is the host page; `src/02` is **generated** from it and from the
   embed control in `node_modules` - edit `webapp/`, run `npm run bsp`, commit
   both. `npm run bsp:check` fails on a stale `src/02`.
-- `npm run downport && npm run abaplint:702` checks the 7.02 downport - it
-  rewrites `src/` in place, so run it in CI or on a throwaway copy.
+- `npm run check:702` checks the 7.02 downport on a scratch copy in
+  `build/702` (`src/` stays as it is); `npm run downport` alone rewrites
+  `src/` in place.
 - Against an abap2UI5 checkout instead of the npm runtime: in abap2UI5,
   `npm run pack:node-runtime`; here,
   `npm i --no-save <abap2UI5>/npm-package/abap2ui5-node-runtime-<v>.tgz @abaplint/transpiler-cli@<the version its package.json names>`,
