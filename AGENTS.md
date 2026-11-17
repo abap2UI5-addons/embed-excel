@@ -51,7 +51,7 @@ Three things are **not** here and must not be copied in:
 | `examples/approuter/` | Serving the host page without a BSP - documented, not tested |
 | `abaplint.jsonc`, `.github/abaplint/` | ABAP Standard (v750), ABAP Cloud, 7.02 |
 | `abap2ui5lint.jsonc` | The abap2UI5 linter over `src/01` |
-| `.github/workflows/` | `check-abap.yaml`, `check-addin.yaml`, `test-e2e.yaml`, `abap-702.yaml`, `publish-702.yaml`, `bump-deps.yaml`, `deploy-pages.yaml` (see "Gates") |
+| `.github/workflows/` | `ci.yaml`, `ci-702.yaml`, `bump-deps.yaml`, `deploy-pages.yaml` (callers of the shared CI template), `check-addin.yaml`, `test-e2e.yaml` (see "Gates") |
 
 ## Rules for the host page (`webapp/`)
 
@@ -151,18 +151,18 @@ npm run e2e:build && npm run e2e
 
 | Workflow (`name:`) | Does |
 |---|---|
-| `check-abap.yaml` (`check-abap`) | abaplint Standard, Cloud and 7.02 (downported in CI), the abap2UI5 linter |
+| `ci.yaml` (`ci`) | the ABAP part, from the shared CI template of abap2UI5-addons ([rap-ext](https://github.com/abap2UI5-addons/rap-ext/blob/main/.github/ci/README.md), pinned by commit, moved by `bump-deps`): abaplint Standard and Cloud, `npm run check:702` (a scratch copy downported and linted, `.github/scripts/check-702.sh`), the abap2UI5 linter (render off) - jobs `check / abaplint (./abaplint.jsonc)`, `check / abaplint (.github/abaplint/abap_cloud.jsonc)`, `check / npm run check:702`, `check / abap2ui5lint` |
 | `check-addin.yaml` (`check-addin`) | ESLint, Prettier, `npm test`, `bsp:check`; a generated manifest through Microsoft's validation service |
-| `publish-702.yaml` / `abap-702.yaml` | on every push to `main`: `npm run auto_downport` writes the downported `702` branch, then `abap-702` lints it - never commit to `702` by hand |
+| `ci-702.yaml` (`ci-702`) | template: on every push to `main` `npm run auto_downport` writes the downported `702` branch, then the same run lints it - never commit to `702` by hand |
 | `test-e2e.yaml` (`test-e2e`) | The Playwright smoke test, UI5 1.136 and 1.71 |
 
-check-abap, check-addin and test-e2e run on pull requests, pushes to `main` and weekly (the lint
+ci, check-addin and test-e2e run on pull requests, pushes to `main` and weekly (the lint
 configs follow abap2UI5 `main` and `702`).
 
 `npm run check` leaves out, as CONVENTIONS §3 asks to name:
 
-- **the 7.02 lint** - `npm run downport` rewrites `src/` in place; run it on a
-  throwaway copy;
+- **the 7.02 lint** - `npm run check:702` (a scratch copy in `build/702`,
+  about three minutes);
 - **the online manifest validation** - it posts the manifest to Microsoft's
   service (`office-addin-manifest validate`); `npm test` checks the manifest
   offline;
@@ -189,7 +189,10 @@ gets verified by hand.
 - Actions are pinned to a commit SHA with the version in a trailing comment;
   `bump-deps.yaml` moves them, with the npm dependencies, once a month in one
   pull request. Workflows ask for `contents: read` only - except that one,
-  which needs to push its branch and open the pull request.
+  which needs to push its branch and open the pull request, and the callers
+  of the template's `ci` (its badge job, which never runs here) and `ci-702`
+  (the push to `702`), which grant `contents: write` to the called workflow;
+  every job that runs pull request code keeps a read-only token.
 - `changelog.txt`: `unreleased` on top, one line per user-visible change.
 - The ecosystem-wide rules live in abap2UI5's
   [CONVENTIONS.md](https://github.com/abap2UI5/abap2UI5/blob/main/.github/shared/CONVENTIONS.md).

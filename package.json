@@ -28,6 +28,7 @@
     "abaplint:cloud": "abaplint .github/abaplint/abap_cloud.jsonc",
     "abaplint:702": "abaplint .github/abaplint/abap_702.jsonc",
     "downport": "abaplint --fix .github/abaplint/abap_702.jsonc",
+    "check:702": "bash .github/scripts/check-702.sh",
     "check:abap2ui5": "abap2ui5lint",
     "fmt:chains": "abap2ui5lint --fix",
     "e2e:build": "node test/e2e/build-backend.mjs",

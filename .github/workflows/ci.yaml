@@ -1,0 +1,46 @@
+name: ci
+
+# The ABAP checks of this repository, from the shared CI template of
+# abap2UI5-addons (rap-ext, .github/ci/README.md): the demo app (src/01) and
+# the BSP sidecars (src/02).
+#
+#   abaplint      Standard ABAP (abaplint.jsonc) and ABAP Cloud
+#                 (.github/abaplint/abap_cloud.jsonc)
+#   npm-scripts   check:702 - a scratch copy of src/ downported and linted
+#                 with abap_702.jsonc, the 7.02 gate of a pull request
+#                 (ci-702 publishes the branch)
+#   abap2ui5lint  the demo app (abap2ui5lint.jsonc, render off there)
+#
+# The add-in itself has workflows of its own: check-addin (ESLint, Prettier,
+# npm test, bsp:check, the manifest) and test-e2e (Playwright). Weekly too:
+# the configs lint against abap2UI5 main and its 702 branch, which move.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # the template's publish-badges asks for contents: write, and GitHub
+    # refuses a run whose called job asks for more than the caller grants. It
+    # never runs here (no badges in abap2ui5lint.jsonc); every job that runs
+    # the code keeps a read-only token
+    permissions:
+      contents: write
+    uses: abap2UI5-addons/rap-ext/.github/workflows/addon-check.yaml@c81dfd461f69e42bb3678f51f80804066e2c9f96 # ci-v1.0.0
+    with:
+      abaplint: '["./abaplint.jsonc", ".github/abaplint/abap_cloud.jsonc"]'
+      npm-scripts: '["check:702"]'
+      abap2ui5lint-render: false
+      canary: ${{ github.event_name == 'schedule' }}
