@@ -48,9 +48,9 @@ export const DEFAULTS = {
   description: "abap2UI5 apps of your SAP system next to the workbook.",
   provider: "abap2UI5",
   button: "abap2UI5",
-  supportUrl: "https://github.com/abap2UI5-addons/office-addin",
+  supportUrl: "https://github.com/abap2UI5-addons/embed-excel",
   icons:
-    "https://raw.githubusercontent.com/abap2UI5-addons/office-addin/main/manifest/icons/",
+    "https://raw.githubusercontent.com/abap2UI5-addons/embed-excel/main/manifest/icons/",
   out: "manifest.xml",
 };
 
@@ -276,7 +276,7 @@ export function buildManifest(opts) {
   // it came from instead
   xml = xml.replace(
     /<!--[\s\S]*?-->\n/,
-    "<!-- Written by abap2UI5/office-addin scripts/manifest.mjs - " +
+    "<!-- Written by abap2UI5-addons/embed-excel scripts/manifest.mjs - " +
       "change the options and write it again rather than editing it. -->\n",
   );
   xml = xml.replace(

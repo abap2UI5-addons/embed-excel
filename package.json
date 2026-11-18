@@ -1,17 +1,17 @@
 {
-  "name": "abap2ui5-office-addin",
+  "name": "abap2ui5-embed-excel",
   "private": true,
   "version": "0.1.0",
   "description": "abap2UI5 apps in Microsoft Excel: an Office add-in (task pane) that runs the real abap2UI5 UI5 frontend next to the workbook, with z2ui5.cc.ExcelBridge for reading and writing cells.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abap2UI5-addons/office-addin.git"
+    "url": "git+https://github.com/abap2UI5-addons/embed-excel.git"
   },
   "bugs": {
-    "url": "https://github.com/abap2UI5-addons/office-addin/issues"
+    "url": "https://github.com/abap2UI5-addons/embed-excel/issues"
   },
-  "homepage": "https://github.com/abap2UI5-addons/office-addin#readme",
+  "homepage": "https://github.com/abap2UI5-addons/embed-excel#readme",
   "engines": {
     "node": ">=22"
   },

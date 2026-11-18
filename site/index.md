@@ -13,7 +13,7 @@ hero:
       link: /guide
     - theme: alt
       text: GitHub
-      link: https://github.com/abap2UI5-addons/office-addin
+      link: https://github.com/abap2UI5-addons/embed-excel
     - theme: alt
       text: All addons
       link: https://abap2ui5-addons.github.io/
@@ -45,7 +45,7 @@ An Office add-in that opens an abap2UI5 app in the task pane of Microsoft Excel:
 
 ## Installation
 
-With [abapGit](https://abapgit.org), from [the repository](https://github.com/abap2UI5-addons/office-addin):
+With [abapGit](https://abapgit.org), from [the repository](https://github.com/abap2UI5-addons/embed-excel):
 
 - Pull with abapGit into a package of its own (for example $Z2UI5_XL) on the system that runs abap2UI5; it brings Z2UI5_CL_XL_DEMO, the BSP Z2UI5_XL and the ICF nodes /sap/bc/ui5_ui5/sap/z2ui5_xl and /sap/bc/bsp/sap/z2ui5_xl
 - In SICF check that /sap/bc/ui5_ui5/sap/z2ui5_xl is active with the same logon settings as /sap/bc/z2ui5
@@ -75,6 +75,6 @@ page->tag( n = `ExcelBridge` ns = `z2ui5`
 
 ## Links
 
-- [abap2UI5/embed-control](https://github.com/abap2UI5/embed-control)
+- [abap2UI5-addons/embed-ui5-control](https://github.com/abap2UI5-addons/embed-ui5-control)
 - [abap2UI5](https://github.com/abap2UI5/abap2UI5)
-- [The repository](https://github.com/abap2UI5-addons/office-addin) - issues and pull requests welcome
+- [The repository](https://github.com/abap2UI5-addons/embed-excel) - issues and pull requests welcome

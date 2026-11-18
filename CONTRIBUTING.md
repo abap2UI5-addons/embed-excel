@@ -1,11 +1,11 @@
 # Contributing
 
 Thank you for helping. Issues and pull requests are welcome at
-https://github.com/abap2UI5-addons/office-addin.
+https://github.com/abap2UI5-addons/embed-excel.
 
 - Read [AGENTS.md](AGENTS.md) first: it says what belongs here and what
   belongs to abap2UI5 (the `z2ui5.cc.ExcelBridge` control, the frontend) or
-  to abap2UI5/embed-control.
+  to abap2UI5-addons/embed-ui5-control.
 - `webapp/` is the source of the host page; `src/02` is generated from it -
   run `npm run bsp` and commit both.
 - Before a pull request: `npm ci && npm run check`, and for a change to the
