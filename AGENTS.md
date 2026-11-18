@@ -1,4 +1,4 @@
-# AGENTS.md — office-addin
+# AGENTS.md — embed-excel
 
 Single source of truth for agents working on **abap2UI5 for Excel**: an
 Office add-in (task pane) that runs abap2UI5 apps in Microsoft Excel with the

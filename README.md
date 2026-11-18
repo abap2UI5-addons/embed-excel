@@ -1,7 +1,7 @@
 # Excel Add-in
 
-[![CI](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/office-addin/ci.yaml?branch=main&label=CI)](https://github.com/abap2UI5-addons/office-addin/actions/workflows/ci.yaml)
-[![ABAP 7.02](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/office-addin/ci-702.yaml?branch=main&label=ABAP%207.02)](https://github.com/abap2UI5-addons/office-addin/actions/workflows/ci-702.yaml)
+[![CI](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/embed-excel/ci.yaml?branch=main&label=CI)](https://github.com/abap2UI5-addons/embed-excel/actions/workflows/ci.yaml)
+[![ABAP 7.02](https://img.shields.io/github/actions/workflow/status/abap2UI5-addons/embed-excel/ci-702.yaml?branch=main&label=ABAP%207.02)](https://github.com/abap2UI5-addons/embed-excel/actions/workflows/ci-702.yaml)
 
 **abap2UI5 apps in Microsoft Excel**: an Office add-in that shows an
 [abap2UI5](https://github.com/abap2UI5/abap2UI5) app in Excel's task pane -
@@ -14,7 +14,7 @@ This is a **source repository** (abap2UI5 CONVENTIONS §1): you edit here, CI
 checks every change. It holds the host page as a BSP application to pull
 with abapGit, a demo app, the manifest generator and the tests.
 
-> Part of [abap2UI5-addons](https://github.com/abap2UI5-addons) - addons and apps for [abap2UI5](https://github.com/abap2UI5/abap2UI5), installed with [abapGit](https://abapgit.org). Documentation: [abap2ui5-addons.github.io/office-addin](https://abap2ui5-addons.github.io/office-addin/).
+> Part of [abap2UI5-addons](https://github.com/abap2UI5-addons) - addons and apps for [abap2UI5](https://github.com/abap2UI5/abap2UI5), installed with [abapGit](https://abapgit.org). Documentation: [abap2ui5-addons.github.io/embed-excel](https://abap2ui5-addons.github.io/embed-excel/).
 
 > **Status: proof of concept.** CI proves the host page, the embedded app and
 > the bridge against a stand-in for Office.js. Nobody has run it in a real
@@ -54,7 +54,7 @@ Office.js only works in the **top document** of the task pane, and
 abap2UI5's own page (`/sap/bc/z2ui5`) neither loads foreign scripts nor lets
 itself be framed (`frameOptions` trusted). So the add-in brings its own page:
 it loads Office.js, boots UI5 with `frameOptions` allow, and embeds the
-abap2UI5 component with the [embed control](https://github.com/abap2UI5/embed-control)
+abap2UI5 component with the [embed control](https://github.com/abap2UI5-addons/embed-ui5-control)
 in **embedded mode** (the app leaves the URL alone). The frontend then runs in
 the same window as Office.js, and `z2ui5.cc.ExcelBridge` finds `window.Excel`.
 

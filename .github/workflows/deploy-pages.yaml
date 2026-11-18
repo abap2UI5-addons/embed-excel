@@ -1,7 +1,7 @@
 name: deploy-pages
 
 # The site of the repository on GitHub Pages
-# (https://abap2ui5-addons.github.io/office-addin/), built with VitePress from site/
+# (https://abap2ui5-addons.github.io/embed-excel/), built with VitePress from site/
 # (npm run site) by the shared CI template (addon-pages.yaml). A pull request
 # builds it, a push to main deploys it. The repository's Pages source must be
 # "GitHub Actions" (Settings > Pages).
