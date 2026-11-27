@@ -125,10 +125,9 @@ holds most of them; keep it in step.
 - **No literal names a `z2ui5_` object.** The rename rewrites references,
   never a literal; `npm run rename` fails on one. Derive the name from a
   typed reference instead.
-- `z2ui5.cc.ExcelBridge` is not mirrored in the released linter
-  (`lib/cc-controls.mjs` of abap2UI5/linter): its attributes get no verdict
-  (no finding, no waiver needed). When the linter mirrors it, they are
-  checked - fix what it finds rather than waiving it.
+- `z2ui5.cc.ExcelBridge` is mirrored in the released linter
+  (`lib/cc-controls.mjs` of abap2UI5/linter): its attributes and events are
+  checked like any control's - fix what it finds rather than waiving it.
 - An enum-typed property never gets an initial value from a binding
   (`MessageStrip type` = `""` terminates the app) - seed it in `model_init`.
 
