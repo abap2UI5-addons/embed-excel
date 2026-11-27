@@ -12,6 +12,7 @@ Legend
 
 unreleased
 ----------
++ Namespace rename: the workflow build-rename pushes the branch rename_<name> with the demo app renamed for an abap2UI5 installation renamed to the same name (ZMYUI5 or /CA2UI5/, at most 10 characters), and npm run rename checks it in CI. The BSP Z2UI5_XL is not renamed and not in that branch - the host page starts the renamed app through its URL parameters app and endpoint
 * The documentation site loaded its styles and scripts from /office-addin/, which is gone since the repository is abap2UI5-addons/embed-excel - it is built for https://abap2ui5-addons.github.io/embed-excel/ now
 * npm run manifest: a --name of 117 to 125 characters wrote a manifest Microsoft's validation refuses - the name also stands in GetStarted.Title ("<name> is ready", at most 125 characters), so --name now takes at most 116
 ! npm run manifest: the default support URL and icon folder point at github.com/abap2UI5-addons/embed-excel, where the repository lives now (the add-in id stays the same)

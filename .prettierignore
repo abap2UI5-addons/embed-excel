@@ -10,3 +10,6 @@ dist/
 # the documentation site - the same files in every addon (site/.vitepress/
 # config.mts says so), formatted where they come from, not here
 site/
+# the namespace rename - the same file in every addon (its header says so),
+# kept byte for byte
+.github/scripts/rename.mjs

@@ -10,6 +10,9 @@ name: ci
 #                 with abap_702.jsonc, the 7.02 gate of a pull request
 #                 (ci-702 publishes the branch)
 #   abap2ui5lint  the demo app (abap2ui5lint.jsonc, render off there)
+#   rename        the namespace rename (npm run rename) - the demo app; the
+#                 BSP in src/02 is not renamed, see AGENTS.md "Namespace
+#                 rename"
 #
 # The add-in itself has workflows of its own: check-addin (ESLint, Prettier,
 # npm test, bsp:check, the manifest) and test-e2e (Playwright). Weekly too:
@@ -43,4 +46,5 @@ jobs:
       abaplint: '["./abaplint.jsonc", ".github/abaplint/abap_cloud.jsonc"]'
       npm-scripts: '["check:702"]'
       abap2ui5lint-render: false
+      rename: true
       canary: ${{ github.event_name == 'schedule' }}

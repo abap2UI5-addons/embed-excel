@@ -10,7 +10,9 @@ https://github.com/abap2UI5-addons/embed-excel.
   run `npm run bsp` and commit both.
 - Before a pull request: `npm ci && npm run check`, and for a change to the
   host page or the demo app also `npm run e2e:build && npm run e2e`. CI runs
-  these, the 7.02 lint and Microsoft's manifest validation.
+  these, the 7.02 lint and Microsoft's manifest validation. `npm run check`
+  ends with the namespace rename check (`npm run rename`, AGENTS.md
+  "Namespace rename"): no literal in the demo app may name a `z2ui5_` object.
 - Something you verified in a real Excel or Microsoft 365 tenant is worth a
   note in the pull request - CI cannot do that, and the README's "What is
   tested" should say so.

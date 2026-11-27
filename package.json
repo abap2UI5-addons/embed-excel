@@ -29,12 +29,13 @@
     "abaplint:702": "abaplint .github/abaplint/abap_702.jsonc",
     "downport": "abaplint --fix .github/abaplint/abap_702.jsonc",
     "check:702": "bash .github/scripts/check-702.sh",
+    "rename": "node .github/scripts/rename.mjs",
     "check:abap2ui5": "abap2ui5lint",
     "fmt:chains": "abap2ui5lint --fix",
     "e2e:build": "node test/e2e/build-backend.mjs",
     "e2e:serve": "node test/e2e/server.mjs",
     "e2e": "playwright test",
-    "check": "npm run lint && npm run format:check && npm test && npm run bsp:check && npm run abaplint && npm run abaplint:cloud && npm run check:abap2ui5",
+    "check": "npm run lint && npm run format:check && npm test && npm run bsp:check && npm run abaplint && npm run abaplint:cloud && npm run check:abap2ui5 && npm run rename",
     "syfixes": "find src -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} +",
     "strip_trailing_ws": "find src -type f -name '*.abap' -exec sed -i 's/[[:space:]]\\+$//' {} +",
     "abaplintpathfix": "sed -i 's|\"/\\.\\./\\.\\./src/|\"/src/|g' abaplint.jsonc",
@@ -68,5 +69,10 @@
   },
   "overrides": {
     "minimatch": "^11.0.4"
+  },
+  "config": {
+    "renameSkip": {
+      "src/02/": "the BSP Z2UI5_XL (WAPA) and its two ICF nodes - abaplint 2.120 has no WAPA renamer (abap2UI5 backlog item abaplint-rename-wapa, abaplint PR #4721) and renames an ICF node without the URL hash of its file name; the host page takes its app and its abap2UI5 service from the URL (app, endpoint), so one unrenamed BSP serves every installation"
+    }
   }
 }
