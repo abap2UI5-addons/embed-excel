@@ -51,7 +51,8 @@ Three things are **not** here and must not be copied in:
 | `examples/approuter/` | Serving the host page without a BSP - documented, not tested |
 | `abaplint.jsonc`, `.github/abaplint/` | ABAP Standard (v750), ABAP Cloud, 7.02 |
 | `abap2ui5lint.jsonc` | The abap2UI5 linter over `src/01` |
-| `.github/workflows/` | `ci.yaml`, `ci-702.yaml`, `bump-deps.yaml`, `deploy-pages.yaml` (callers of the shared CI template), `check-addin.yaml`, `test-e2e.yaml` (see "Gates") |
+| `.github/scripts/rename.mjs` | The namespace rename (`npm run rename`) - the same file in every addon, never edited here (see "Namespace rename") |
+| `.github/workflows/` | `ci.yaml`, `ci-702.yaml`, `bump-deps.yaml`, `deploy-pages.yaml`, `build-rename.yaml` (callers of the shared CI template), `check-addin.yaml`, `test-e2e.yaml` (see "Gates") |
 
 ## Rules for the host page (`webapp/`)
 
@@ -103,7 +104,8 @@ holds most of them; keep it in step.
   (`--icons`).
 - **The BSP's identity is `Z2UI5_XL`** (BSP, ICF nodes, the default `--path`
   of the manifest, `BSP_PATH` of the test server). Renaming it touches all
-  of them and the README.
+  of them and the README. The namespace rename leaves it alone for that
+  reason (see "Namespace rename").
 - `/sap/bc/ui5_ui5/sap/z2ui5_xl/resources/` is the system's UI5 - the page
   bootstraps from `resources/sap-ui-core.js`, and the embed control lives
   under `thirdparty/`, never under `resources/`.
@@ -120,6 +122,9 @@ holds most of them; keep it in step.
 - Lint-clean for ABAP Standard, ABAP Cloud and the 7.02 downport, and for the
   abap2UI5 linter at `failOn: warning`. Class names `^Z2UI5_CL_XL_`, within
   25 characters (the budget of abap2UI5's namespace rename).
+- **No literal names a `z2ui5_` object.** The rename rewrites references,
+  never a literal; `npm run rename` fails on one. Derive the name from a
+  typed reference instead.
 - `z2ui5.cc.ExcelBridge` is not mirrored in the released linter
   (`lib/cc-controls.mjs` of abap2UI5/linter): its attributes get no verdict
   (no finding, no waiver needed). When the linter mirrors it, they are
@@ -145,13 +150,14 @@ holds most of them; keep it in step.
 
 ```bash
 npm ci
-npm run check        # lint, format:check, test, bsp:check, abaplint, abaplint:cloud, check:abap2ui5
+npm run check        # lint, format:check, test, bsp:check, abaplint, abaplint:cloud, check:abap2ui5, rename
 npm run e2e:build && npm run e2e
 ```
 
 | Workflow (`name:`) | Does |
 |---|---|
-| `ci.yaml` (`ci`) | the ABAP part, from the shared CI template of abap2UI5-addons ([rap-ext](https://github.com/abap2UI5-addons/rap-ext/blob/main/.github/ci/README.md), pinned by commit, moved by `bump-deps`): abaplint Standard and Cloud, `npm run check:702` (a scratch copy downported and linted, `.github/scripts/check-702.sh`), the abap2UI5 linter (render off) - jobs `check / abaplint (./abaplint.jsonc)`, `check / abaplint (.github/abaplint/abap_cloud.jsonc)`, `check / npm run check:702`, `check / abap2ui5lint` |
+| `ci.yaml` (`ci`) | the ABAP part, from the shared CI template of abap2UI5-addons ([rap-ext](https://github.com/abap2UI5-addons/rap-ext/blob/main/.github/ci/README.md), pinned by commit, moved by `bump-deps`): abaplint Standard and Cloud, `npm run check:702` (a scratch copy downported and linted, `.github/scripts/check-702.sh`), the abap2UI5 linter (render off), the namespace rename (`npm run rename`) - jobs `check / abaplint (./abaplint.jsonc)`, `check / abaplint (.github/abaplint/abap_cloud.jsonc)`, `check / npm run check:702`, `check / abap2ui5lint`, `check / rename` |
+| `build-rename.yaml` (`build-rename`) | template, manual: `rename.mjs --name <name>` and a push of the result to the branch `rename_<name>` - never commit to such a branch by hand |
 | `check-addin.yaml` (`check-addin`) | ESLint, Prettier, `npm test`, `bsp:check`; a generated manifest through Microsoft's validation service |
 | `ci-702.yaml` (`ci-702`) | template: on every push to `main` `npm run auto_downport` writes the downported `702` branch, then the same run lints it - never commit to `702` by hand |
 | `test-e2e.yaml` (`test-e2e`) | The Playwright smoke test, UI5 1.136 and 1.71 |
@@ -177,9 +183,51 @@ the runtime's `package.json` names; `build-backend.mjs` refuses others);
 `@abap2ui5/embed-control` is exact, because its copy is committed in `src/02`.
 
 **What the gates cannot prove**: that a real Excel loads the add-in, the real
-Office.js under the page's CSP, logon and cookies in Excel on the web. The
+Office.js under the page's CSP, logon and cookies in Excel on the web, that a
+`rename_<name>` branch imports and runs on a renamed abap2UI5. The
 README's "What is tested" lists it; keep that list honest when something
 gets verified by hand.
+
+## Namespace rename
+
+`npm run rename` (CI: `check / rename`, the last step of `npm run check`) and
+the manual `build-rename` workflow are abap2UI5's namespace rename -
+`.github/scripts/rename.mjs`, the same file in every repository that has one
+(byte for byte: it is left out of ESLint and Prettier here; a change goes to
+all of them). Every `z2ui5_` object becomes `<name>_...` (a customer name such
+as `ZMYUI5`) or `/<ns>/...` (a registered namespace), and so does every
+reference to abap2UI5, which is cloned and renamed along: the branch
+`rename_<name>` runs on an abap2UI5 renamed with the same name by its own
+`build-rename`. Without `--name` the check takes the worst case, a
+10-character name. Not complete, and `package.json` `config` says where -
+every run prints it:
+
+- **`src/01` is renamed**: `Z2UI5_CL_XL_DEMO` -> `ZMYUI5_CL_XL_DEMO` /
+  `/CA2UI5/CL_XL_DEMO`, with its references to `z2ui5_if_app`,
+  `z2ui5_if_client`, `z2ui5_cl_ui5_view_builder`. The UI5 namespace in its
+  view (`xmlns:z2ui5` = `z2ui5.cc`, the control `z2ui5.cc.ExcelBridge`) is a
+  frontend module id, not an ABAP object, and stays - abap2UI5's own rename
+  keeps it too.
+- **`src/02` is not renamed and not in the branch** (`renameSkip`): abaplint
+  has no renamer for a BSP (WAPA) - backlog item `abaplint-rename-wapa`,
+  abaplint PR #4721. Without the skip abaplint 2.120.92 renames the two ICF
+  nodes (name, URL, but not the URL hash in the file name) and leaves the BSP
+  they serve as `Z2UI5_XL` - a broken half, which the script reports as "0
+  issues". Do not take `src/02` out of `renameSkip` before abaplint renames a
+  WAPA; then `build-bsp.mjs`, `bsp:check`, the manifest's default `--path`
+  and the README have to follow.
+- **Nothing outside `src/` is renamed**, and nothing has to be while the BSP
+  keeps its name: `webapp/`, `scripts/manifest.mjs`, the tests and the
+  workflows name `z2ui5_xl` and the defaults `Z2UI5_CL_XL_DEMO` and
+  `/sap/bc/z2ui5`, all of the unrenamed installation. A renamed one is reached
+  through the same host page with its URL parameters:
+  `npm run manifest -- --app ZMYUI5_CL_XL_DEMO --endpoint /sap/bc/zmyui5`
+  (the host page and the generator accept a namespaced class name). So the
+  BSP comes from `main`; a system that has only renamed installations still
+  pulls `main` for it, demo class `Z2UI5_CL_XL_DEMO` included, which does not
+  activate there without an unrenamed abap2UI5.
+- A change that spans several repositories: `RENAME_DEPS_FROM=<dir> npm run
+  rename` takes abap2UI5 from the clone in `<dir>`.
 
 ## Conventions
 

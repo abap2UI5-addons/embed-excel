@@ -22,16 +22,17 @@ with abapGit, a demo app, the manifest generator and the tests.
 
 - [How it works](#how-it-works)
 - [Requirements](#requirements)
-- [Install (admins)](#install-admins)
+- [Installation](#installation)
 - [The manifest](#the-manifest)
 - [Deploy to users](#deploy-to-users)
 - [Excel on the web](#excel-on-the-web)
 - [Content-Security-Policy](#content-security-policy)
 - [Without a BSP](#without-a-bsp)
-- [Apps that use Excel (developers)](#apps-that-use-excel-developers)
-- [Limits](#limits)
+- [Usage](#usage)
+- [Limitations](#limitations)
 - [What is tested](#what-is-tested)
 - [Development](#development)
+- [Contributing](#contributing)
 
 ## How it works
 
@@ -84,7 +85,7 @@ reverse proxy that puts both under one host ([Without a BSP](#without-a-bsp)).
 - For `npm run manifest`: Node.js 22 and `npm ci` in a clone of this
   repository.
 
-## Install (admins)
+## Installation
 
 1. **Pull this repository with abapGit** into a package of its own (for
    example `$Z2UI5_XL`, or a transportable `Z2UI5_XL`), on the system that
@@ -117,6 +118,16 @@ the host page, and the roundtrips follow it.
 **ABAP Cloud** (SAP BTP, ABAP environment; S/4HANA Cloud public edition) has
 no BSP applications: pull only `src/01` there and serve the host page
 [without a BSP](#without-a-bsp).
+
+**A renamed abap2UI5.** To run a second copy next to the original in the same
+system, rename it the way abap2UI5 itself is renamed: run the workflow
+**build-rename** (Actions → build-rename → Run workflow) with the name your
+abap2UI5 installation was renamed to - e.g. `ZMYUI5` or `/CA2UI5/`. It pushes
+the branch `rename_<name>`, in which the demo app and every reference to
+abap2UI5 carry that name (`ZMYUI5_CL_XL_DEMO`); pull it with abapGit. The
+branch does not hold the BSP: `Z2UI5_XL` is not renamed and stays the one host
+page of the system, from `main` - write the manifest with
+`--app ZMYUI5_CL_XL_DEMO --endpoint <the service of the renamed abap2UI5, e.g. /sap/bc/zmyui5>`.
 
 ## The manifest
 
@@ -296,7 +307,7 @@ serve the host page **on the same origin** as the abap2UI5 service:
 
 Documented, not tested by CI.
 
-## Apps that use Excel (developers)
+## Usage
 
 Any abap2UI5 app runs in the task pane - start it with `--app`. To talk to
 the workbook, put `z2ui5.cc.ExcelBridge` into the view (it renders nothing)
@@ -376,7 +387,7 @@ into a second table), a *Follow selection* switch (enabled once Excel
 answered) and a message strip for results and errors. It is lint-clean for
 ABAP Standard, ABAP Cloud and the 7.02 downport.
 
-## Limits
+## Limitations
 
 - **Size.** At most `maxCells` cells per write or read (20000 by default,
   100000 at most, header row included); more is refused with `OnError`
@@ -418,7 +429,7 @@ has to ask for the control as a file of its own.
 
 ```bash
 npm ci
-npm run check        # ESLint, Prettier, Node tests, bsp:check, abaplint (Standard, Cloud), abap2UI5 linter
+npm run check        # ESLint, Prettier, Node tests, bsp:check, abaplint (Standard, Cloud), abap2UI5 linter, namespace rename
 npm run e2e:build    # the demo app transpiled onto @abap2ui5/node-runtime
 npm run e2e          # Playwright smoke test, UI5 1.136 and 1.71
 npm run e2e:serve    # the test server, to look at: http://127.0.0.1:4310/
@@ -437,6 +448,11 @@ npm run e2e:serve    # the test server, to look at: http://127.0.0.1:4310/
   afterwards).
 
 AGENTS.md has the rules for changes; `changelog.txt` the history.
+
+## Contributing
+
+Issues and pull requests are welcome - see [CONTRIBUTING.md](CONTRIBUTING.md) for
+what CI checks.
 
 ## License
 

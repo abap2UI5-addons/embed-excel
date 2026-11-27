@@ -22,6 +22,12 @@ export default [
       "test/e2e/.deps/**",
       "test-results/**",
       "playwright-report/**",
+      // the namespace rename: the same file in every addon (its header says
+      // so), linted where it comes from - and what a run leaves behind
+      ".github/scripts/rename.mjs",
+      ".github/abaplint/rename-deps/**",
+      ".github/abaplint/output/**",
+      ".github/out/**",
     ],
   },
   // the host page: browser scripts and one UI5 module, on the UI5 1.71 floor
