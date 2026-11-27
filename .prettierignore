@@ -13,3 +13,6 @@ site/
 # the namespace rename - the same file in every addon (its header says so),
 # kept byte for byte
 .github/scripts/rename.mjs
+# the monthly dependency update - the same file in every repository (its
+# header says so), kept byte for byte
+.github/scripts/update-deps.mjs
